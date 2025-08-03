@@ -5,12 +5,17 @@ import header as h
 global VERBOSE
 VERBOSE = False
 
+def vprint(txt:str):
+    if VERBOSE:
+        print(txt)
+
 @click.command()
 @click.argument("file", type=str)
 @click.option("-v","--verbose", default=False, help="Enable more debug printing", is_flag=True)
 @click.option("-n","--name",default="rom", help="Name of output files")
 def cli(file, verbose, name):
     h.VERBOSE = verbose
+    VERBOSE = verbose
 
     rom = open(file, 'rb').read()
     header = check_header(rom)
@@ -22,7 +27,17 @@ def cli(file, verbose, name):
     if header.trainer:
         vprint("Trainer present")
         trainer = rom[16:528]
-        open()
+        open(f"{name}.ntr")
+
+        prg = rom[528:header.prg_rom_size]
+    else:
+        prg = rom[16:header.prg_rom_size+22]
+
+    print(header.prg_rom_size+12)
+    print(prg[-4:])
+
+    reset_vector = (prg[-3] << 8) | prg[-4]
+    print(f"Reset vector: ${hex(reset_vector)[2:]}")
 
 if __name__ == '__main__':
     cli()

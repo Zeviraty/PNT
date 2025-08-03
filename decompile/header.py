@@ -4,7 +4,9 @@ class INES_header:
                  battery, mirroring, playchoice_10,
                  vs_unisystem, pad):
         self.prg_rom_pages = prg_rom_pages
+        self.prg_rom_size = prg_rom_pages * 16 * 1024
         self.chr_rom_pages = chr_rom_pages
+        self.chr_rom_size = chr_rom_pages * 8 * 1024
         self.chr_ram = chr_ram
         self.mapper = mapper
         self.four_screen = four_screen
@@ -31,6 +33,7 @@ class NES20_header:
                  chr_ram_size, chr_nvram_size
                  ):
         self.prg_rom_pages = prg_rom_pages
+        
         self.chr_rom_pages = chr_rom_pages
         self.chr_ram = chr_ram
         self.mapper = mapper
@@ -41,8 +44,14 @@ class NES20_header:
         self.playchoice_10 = playchoice_10
         self.vs_unisystem = vs_unisystem
         self.sub_mapper = sub_mapper
-        self.prg_rom_size = prg_rom_size
-        self.chr_rom_size = chr_rom_size
+        if prg_rom_size != 0:
+            self.prg_rom_size = prg_rom_size
+        else:
+            self.prg_rom_size = prg_rom_pages * 16 * 1024
+        if chr_rom_size != 0:
+            self.chr_rom_size = chr_rom_size
+        else:
+            self.chr_rom_size = chr_rom_pages * 8 * 1024
         self.eeprom = eeprom
         self.prg_ram_size = prg_ram_size
         self.chr_ram_size = chr_ram_size
