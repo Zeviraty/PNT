@@ -31,9 +31,8 @@ def cli(file, verbose, name):
 
         prg = rom[528:header.prg_rom_size]
     else:
-        prg = rom[16:header.prg_rom_size+22]
+        prg = rom[16:header.prg_rom_size]
 
-    print(header.prg_rom_size+12)
     print(prg[-4:])
 
     reset_vector = (prg[-3] << 8) | prg[-4]
