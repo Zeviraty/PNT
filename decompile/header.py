@@ -18,6 +18,7 @@ class INES_header:
     def to_file(self,location: str):
         open(location, 'w').write("")
         file = open(location, 'a')
+        file.write("type: INES\n")
         for k,v in vars(self).items():
             file.write(f"{k}: {v}\n")
 
@@ -50,6 +51,7 @@ class NES20_header:
     def to_file(self,location: str):
         open(location, 'w').write("")
         file = open(location, 'a')
+        file.write("type: NES 2.0\n")
         for k,v in vars(self).items():
             file.write(f"{k}: {v}\n")
 
