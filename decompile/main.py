@@ -1,3 +1,10 @@
+'''
+Main decompiling file
+
+header.py: Decoding INES and NES2.0 headers
+opcodes.json: All 6502 opcodes (taken from https://github.com/Esshahn/pydisass6502/blob/main/lib/opcodes.json)
+'''
+
 import click
 from header import check_header
 import header as h
@@ -29,14 +36,12 @@ def cli(file, verbose, name):
         trainer = rom[16:528]
         open(f"{name}.ntr")
 
-        prg = rom[528:header.prg_rom_size]
+        prg = rom[528:header.prg_rom_size+528]
     else:
-        prg = rom[16:header.prg_rom_size]
-
-    print(prg[-4:])
+        prg = rom[16:header.prg_rom_size+16]
 
     reset_vector = (prg[-3] << 8) | prg[-4]
-    print(f"Reset vector: ${hex(reset_vector)[2:]}")
+    vprint(f"Reset vector: ${reset_vector:04x}")
 
 if __name__ == '__main__':
     cli()
