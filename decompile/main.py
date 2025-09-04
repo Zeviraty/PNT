@@ -8,21 +8,20 @@ opcodes.json: All 6502 opcodes (taken from https://github.com/Esshahn/pydisass65
 import click
 from header import check_header
 import header as h
-
-global VERBOSE
-VERBOSE = False
-
-def vprint(txt:str):
-    if VERBOSE:
-        print(txt)
+import os
+from utils import set_verbose, vprint
 
 @click.command()
-@click.argument("file", type=str)
+@click.argument("files", nargs=-1, type=click.Path(exists=True))
 @click.option("-v","--verbose", default=False, help="Enable more debug printing", is_flag=True)
-@click.option("-n","--name",default="rom", help="Name of output files")
-def cli(file, verbose, name):
-    h.VERBOSE = verbose
-    VERBOSE = verbose
+@click.option("-f","--folder",default=None, help="Folder for output files")
+def cli(files, verbose, folder):
+    for file in files:
+        name = os.path.join(folder,os.path.split(file)[1].split(".")[0])
+        decompile(file,verbose,name)
+
+def decompile(file,verbose, name):
+    set_verbose(verbose)
 
     rom = open(file, 'rb').read()
     header = check_header(rom)
@@ -34,7 +33,7 @@ def cli(file, verbose, name):
     if header.trainer:
         vprint("Trainer present")
         trainer = rom[16:528]
-        open(f"{name}.ntr")
+        open(f"{name}.ntr",'wb').write(trainer)
 
         prg = rom[528:header.prg_rom_size+528]
     else:

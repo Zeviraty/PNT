@@ -1,3 +1,5 @@
+from utils import vprint
+
 class INES_header:
     def __init__(self,prg_rom_pages, chr_rom_pages, chr_ram,
                  mapper, four_screen, trainer,
@@ -63,13 +65,6 @@ class NES20_header:
         file.write("type: NES 2.0\n")
         for k,v in vars(self).items():
             file.write(f"{k}: {v}\n")
-
-global VERBOSE
-VERBOSE = False
-
-def vprint(txt:str):
-    if VERBOSE:
-        print(txt)
 
 def check_header(rom):
     nes = rom[0:4] == b'NES\x1a'
